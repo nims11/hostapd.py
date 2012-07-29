@@ -1,5 +1,6 @@
 #!/usr/bin/env python2.7
 import subprocess;
+from time import sleep
 IN = 'wlan0'
 OUT = 'eth0'
 IP = '10.0.0.1'
@@ -12,11 +13,14 @@ def start_hostapd():
 		with open('hostapd.conf') as f: pass
 	except IOError as e:
 		print 'No config file exists!' # do you want to create one?
+	print 'configuring',IN,'...'
 	setup_wlan = subprocess.Popen(['ifconfig', IN, 'up', IP, 'netmask', '255.255.255.0'])
+	sleep(1)
 	dhcp_log = open('./dhcp.log', 'w')
-	dhcp_err_log = open('./dhcp_error.log', 'w')
 	print 'Starting dhcpd...'
-	dhcp_proc = subprocess.Popen(['dhcpd',IN],stdout = dhcp_log, stderr = dhcp_err_log) 
+	dhcp_proc = subprocess.Popen(['dhcpd',IN],stdout = dhcp_log, stderr = dhcp_log) 
+	sleep(1)
+	dhcp_log.close();
 	print 'Configuring iptables...'
 	subprocess.call(['iptables','--flush'])
 	subprocess.call(['iptables','--table','nat','--flush'])
@@ -26,11 +30,8 @@ def start_hostapd():
 	subprocess.call(['iptables','--append','FORWARD','--in-interface',IN,'-j','ACCEPT'])
 	subprocess.call(['sysctl','-w','net.ipv4.ip_forward=1'])
 	
-	hostapd_log = open('./hostapd.log', 'w')
-	hostapd_err_log = open('./hostapd_error.log', 'w')
-	
 	print 'Starting Hostapd...'
-	hostapd_proc = subprocess.Popen(['hostapd','hostapd.conf'],stdout = hostapd_log, stderr = hostapd_err_log)
+	hostapd_proc = subprocess.Popen(['hostapd -t -d hostapd.conf >./hostapd.log'],shell=True)
 	print 'Done... (Hopefully!)'
 	print
 
