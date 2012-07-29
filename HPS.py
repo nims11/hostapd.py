@@ -7,6 +7,7 @@ def start_hostapd():
 	"""
 	Starts Hostapd
 	"""
+	print
 	try:
 		with open('hostapd.conf') as f: pass
 	except IOError as e:
@@ -14,7 +15,9 @@ def start_hostapd():
 	setup_wlan = subprocess.Popen(['ifconfig', IN, 'up', IP, 'netmask', '255.255.255.0'])
 	dhcp_log = open('./dhcp.log', 'w')
 	dhcp_err_log = open('./dhcp_error.log', 'w')
+	print 'Starting dhcpd...'
 	dhcp_proc = subprocess.Popen(['dhcpd',IN],stdout = dhcp_log, stderr = dhcp_err_log) 
+	print 'Configuring iptables...'
 	subprocess.call(['iptables','--flush'])
 	subprocess.call(['iptables','--table','nat','--flush'])
 	subprocess.call(['iptables','--delete-chain'])
@@ -22,15 +25,23 @@ def start_hostapd():
 	subprocess.call(['iptables','--table','nat','--append','POSTROUTING','--out-interface',OUT,'-j','MASQUERADE'])
 	subprocess.call(['iptables','--append','FORWARD','--in-interface',IN,'-j','ACCEPT'])
 	subprocess.call(['sysctl','-w','net.ipv4.ip_forward=1'])
-
+	
 	hostapd_log = open('./hostapd.log', 'w')
 	hostapd_err_log = open('./hostapd_error.log', 'w')
-
+	
+	print 'Starting Hostapd...'
 	hostapd_proc = subprocess.Popen(['hostapd','hostapd.conf'],stdout = hostapd_log, stderr = hostapd_err_log)
+	print 'Done... (Hopefully!)'
+	print
 
 def stop_hostapd():
 	"""
 	Stops Hostapd and dhcpd
 	"""
+	print
+
+	print 'Killing Hostapd...'
 	subprocess.call(['killall','hostapd'])
+	print 'Killing dhcpd...'
 	subprocess.call(['killall','dhcpd'])
+	print

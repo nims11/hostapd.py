@@ -1,6 +1,6 @@
 #!/usr/bin/env python2.7
 import sys
-from HPS import start_hostapd
+from HPS import start_hostapd, stop_hostapd
 
 def exit_script():
 	print '\nGoodbye!'
@@ -10,11 +10,10 @@ def interactive():
 	Starts Interactive Session
 	"""
 	print 'Interactive Session'
-	print
-	print '1. Start Hostapd'
-	print '2. Stop Hostapd'
-	print '3. Configure hostapd.conf'
-	print '0. exit'
+	print '1=Start Hostapd; ',
+	print '2=Stop Hostapd; ',
+	print '3=Configure hostapd.conf; ',
+	print '0=exit'
 	while True:
 		try:
 			print 'Enter Choice : ',
