@@ -27,7 +27,7 @@ def interactive():
 
 	options = { 0 : exit_script,
 			1 : start_hostapd,
-			#2 : stop_hostapd,
+			2 : stop_hostapd,
 			#3 : config_hostapd,
 			}
 	while ch not in options:
@@ -45,7 +45,8 @@ def interactive():
 
 def main():
 	if len(sys.argv) == 1:
-		interactive()
+		while True:
+			interactive()
 
 if __name__ == '__main__':
 	main()
