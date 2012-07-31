@@ -1,6 +1,7 @@
 #!/usr/bin/env python2.7
 import sys
 from HPS import start_hostapd, stop_hostapd
+from config import config_hostapd
 
 def exit_script():
 	print '\nGoodbye!'
@@ -27,7 +28,7 @@ def interactive():
 	options = { 0 : exit_script,
 			1 : start_hostapd,
 			2 : stop_hostapd,
-			#3 : config_hostapd,
+			3 : config_hostapd,
 			}
 	while ch not in options:
 		print 'Invalid Option'
