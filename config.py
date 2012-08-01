@@ -6,10 +6,10 @@ config_template = {
 		'ssid' : {'type' : 0, 'default' : 'test'},
 		'hw_mode' : {'type' : 1, 'default' : 'g', 'choices' : ['a','b','g','n']},
 		'channel' : {'type' : 1, 'default' : '6', 'choices' : [str(x) for x in range(1,12)]},
-		'macaddr_acl' : {'type' : 1, 'default' : 0, 'choices' : [0,1,2]},
-		'auth_algs' : {'type' : 1, 'default' : 1, 'choices' : [1,2,3]},
-		'ignore_broadcast_ssid' : {'type' : 1, 'default' : 0, 'choices' : [0,1,2]},
-		'wpa' : {'type' : 1, 'default' : 3, 'choices' : [1,2,3]},
+		'macaddr_acl' : {'type' : 1, 'default' : '0', 'choices' : ['0','1','2']},
+		'auth_algs' : {'type' : 1, 'default' : '1', 'choices' : ['1','2','3']},
+		'ignore_broadcast_ssid' : {'type' : 1, 'default' : '0', 'choices' : ['0','1','2']},
+		'wpa' : {'type' : 1, 'default' : '3', 'choices' : ['1','2','3']},
 		'wpa_passphrase' : {'type' : 0, 'default' : 'foobar123'},
 		'wpa_key_mgmt' : {'type' : 1, 'default' : 'WPA-PSK', 'choices' : ['WPA-PSK','WPA-EAP','WPA-PSK WPA-EAP']},
 		'wpa_pairwise' : {'type' : 1, 'default' : 'TKIP', 'choices' : ['TKIP','CCMP']},
@@ -46,5 +46,12 @@ def config_hostapd():
 					break;
 				else:
 					print 'Invalid Input\n:',
-	print config
+	write_config()
 
+def write_config():
+	print '\nConfirm Write? [y/N] ? ',
+	ch = raw_input()
+	if ch == 'y' or ch == 'Y':
+		with open('/etc/py_hostapd.conf', 'w') as f:
+			for attr in config:
+				f.write( str(attr[0]) + '=' + str(attr[1]) + '\n' )

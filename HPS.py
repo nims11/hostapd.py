@@ -10,7 +10,7 @@ def start_hostapd():
 	"""
 	print
 	try:
-		with open('hostapd.conf') as f: pass
+		with open('/etc/py_hostapd.conf') as f: pass
 	except IOError as e:
 		print 'No config file exists!' # do you want to create one?
 	print 'configuring',IN,'...'
@@ -31,7 +31,7 @@ def start_hostapd():
 	subprocess.call(['sysctl','-w','net.ipv4.ip_forward=1'])
 	
 	print 'Starting Hostapd...'
-	hostapd_proc = subprocess.Popen(['hostapd -t -d hostapd.conf >./hostapd.log'],shell=True)
+	hostapd_proc = subprocess.Popen(['hostapd -t -d /etc/py_hostapd.conf >./hostapd.log'],shell=True)
 	print 'Done... (Hopefully!)'
 	print
 
