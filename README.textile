@@ -1,4 +1,4 @@
-h1. hostapd-python-scriptd
+h1. hostapd-python-script
 
 by Nimesh Ghelani (nims11) 
 
