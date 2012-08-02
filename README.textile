@@ -1,0 +1,18 @@
+h1. hostapd-python-scriptd
+
+by Nimesh Ghelani (nims11) 
+
+Python Script to make using and configuring hostapd easier.
+
+h2. Dependencies
+
+   * dhcpd
+   * hostapd
+   * python (2.7)
+
+h2. Usage
+
+chmod +x hostapd.py 
+sudo ./hostapd.py
+
+This will start hostapd.py in interactive mode.
