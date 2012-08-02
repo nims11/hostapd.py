@@ -1,5 +1,6 @@
-* configuring
-* editing
-* background mode
-* config file
-* hostapd as daemon
+* editing single attributes like ssid, WPA key, etc
+* restart hostapd
+* non-interactive options
+	* start
+	* stop
+	* restart
