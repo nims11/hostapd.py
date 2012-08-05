@@ -5,3 +5,4 @@
 	* stop
 	* restart
 * dhcp configuration
+* add checks for KeyboardInterrupts and file existance
