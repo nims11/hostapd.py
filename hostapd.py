@@ -1,7 +1,8 @@
 #!/usr/bin/env python2.7
 import sys
 from HPS import start_hostapd, stop_hostapd
-from config_hostapd import config_hostapd, change_ssid
+from config_hostapd import config_hostapd, change_attr
+from functools import partial
 #from config_dhcpd import config_dhcpd
 
 def exit_script():
@@ -17,6 +18,7 @@ def interactive():
 	print '3= Configure hostapd.conf; ',
 	print '4= Configure dhcpd.conf; ',
 	print '5= Change ssid;',
+	print '6= Change WPA passphrase;',
 	print '0= exit'
 	while True:
 		try:
@@ -33,7 +35,8 @@ def interactive():
 			2 : stop_hostapd,
 			3 : config_hostapd,
 			#4 : config_dhcpd,
-			5 : change_ssid,
+			5 : partial(change_attr,'ssid'),
+			6 : partial(change_attr,'wpa_passphrase'),
 			}
 	while ch not in options:
 		print 'Invalid Option'

@@ -55,19 +55,19 @@ def write_config():
 		with open('/etc/py_hostapd.conf', 'w') as f:
 			for attr in config:
 				f.write( str(attr[0]) + '=' + str(attr[1]) + '\n' )
-def change_ssid():
+def change_attr(attr):
 	print '\nEnter New ssid : ',
 	while True:
-		new_ssid = raw_input()
-		if len(new_ssid) !=0:
+		new_attr = raw_input()
+		if len(new_attr) !=0:
 			break;
 	new_content = ""
 	with open('/etc/py_hostapd.conf','r+') as f:
 		for line in f:
-			if line.find('ssid') != 0:
+			if line.find(attr) != 0:
 				new_content += line
 			else:
-				new_content += 'ssid=' + new_ssid + "\n"
+				new_content += attr + '=' + new_attr + "\n"
 		f.seek(0)
 	f = open('/etc/py_hostapd.conf','w')
 	f.write(new_content)
