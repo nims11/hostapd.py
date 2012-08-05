@@ -46,3 +46,7 @@ def stop_hostapd():
 	print 'Killing dhcpd...'
 	subprocess.call(['killall','dhcpd'])
 	print
+
+def restart_hostapd():
+	stop_hostapd()
+	start_hostapd()

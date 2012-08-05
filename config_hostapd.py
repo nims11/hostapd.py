@@ -56,7 +56,7 @@ def write_config():
 			for attr in config:
 				f.write( str(attr[0]) + '=' + str(attr[1]) + '\n' )
 def change_attr(attr):
-	print '\nEnter New ssid : ',
+	print '\nEnter New',attr,': ',
 	while True:
 		new_attr = raw_input()
 		if len(new_attr) !=0:

@@ -1,8 +1,8 @@
-* editing single attributes like ssid, WPA key, etc
-* restart hostapd
 * non-interactive options
 	* start
 	* stop
 	* restart
 * dhcp configuration
 * add checks for KeyboardInterrupts and file existance
+* change IN and OUT interfaces
+* document
