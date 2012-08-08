@@ -86,6 +86,12 @@ def main():
 	if len(sys.argv) == 1:
 		while True:
 			interactive()
+	actions = { 'start' : start_hostapd,
+			'stop' : stop_hostapd,
+			'restart' : restart_hostapd,
+			}
+	if sys.argv[1] in actions:
+		actions[sys.argv[1]]()
 
 if __name__ == '__main__':
 	main()
