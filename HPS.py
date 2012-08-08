@@ -1,9 +1,7 @@
 #!/usr/bin/env python2.7
 import subprocess;
 from time import sleep
-IN = 'wlan0'
-OUT = 'eth0'
-IP = '10.0.0.1'
+from config import IN,OUT,IP,NETMASK
 def start_hostapd():
 	"""
 	Starts Hostapd
@@ -14,7 +12,7 @@ def start_hostapd():
 	except IOError as e:
 		print 'No config file exists!' # do you want to create one?
 	print 'configuring',IN,'...'
-	setup_wlan = subprocess.Popen(['ifconfig', IN, 'up', IP, 'netmask', '255.255.255.0'])
+	setup_wlan = subprocess.Popen(['ifconfig', IN, 'up', IP, 'netmask', NETMASK])
 	sleep(1)
 	dhcp_log = open('./dhcp.log', 'w')
 	print 'Starting dhcpd...'

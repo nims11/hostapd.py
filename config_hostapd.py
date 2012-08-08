@@ -46,9 +46,9 @@ def config_hostapd():
 					break;
 				else:
 					print 'Invalid Input\n:',
-	write_config()
+	write_hostapd_conf()
 
-def write_config():
+def write_hostapd_conf():
 	print '\nConfirm Write? [y/N] ? ',
 	ch = raw_input()
 	if ch == 'y' or ch == 'Y':
@@ -72,7 +72,6 @@ def change_attr(attr):
 	f = open('/etc/py_hostapd.conf','w')
 	f.write(new_content)
 	f.close()
-
 
 if __name__ == '__main__':
 	config_hostapd()
