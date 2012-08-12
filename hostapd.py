@@ -1,7 +1,7 @@
 #!/usr/bin/env python2.7
 import sys
 from HPS import start_hostapd, stop_hostapd, restart_hostapd
-from config_hostapd import config_hostapd, change_attr
+from config_hostapd import config_hostapd, config_hostapd_default, change_attr
 from functools import partial
 #from config_dhcpd import config_dhcpd
 
@@ -83,6 +83,11 @@ def interactive():
 
 
 def main():
+	try:
+		with open('/etc/py_hostapd.conf') as f: pass
+	except IOError as e:
+		print "/etc/py_hostapd.conf Not Found!"
+		config_hostapd_default()
 	if len(sys.argv) == 1:
 		while True:
 			interactive()

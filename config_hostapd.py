@@ -15,11 +15,23 @@ config_template = {
 		'wpa_pairwise' : {'type' : 1, 'default' : 'TKIP', 'choices' : ['TKIP','CCMP']},
 		'rsn_pairwise' : {'type' : 1, 'default' : 'CCMP', 'choices' : ['TKIP','CCMP']},
 		}
-config = []
+def config_hostapd_default():
+	"""
+	Config default
+	"""
+	config = []
+	for attribute in config_order:
+		value = config_template[attribute]
+		foo = config_template[attribute]['default']
+		config.append((attribute, foo))
+	print 'Writing Default /etc/py_hostapd.conf...'
+	write_hostapd_conf(config)
+
 def config_hostapd():
 	"""
 	Config Wizard
 	"""
+	config = []
 	print 'Hostapd Config Wizard...\n'
 	for attribute in config_order:
 		value = config_template[attribute]
@@ -46,9 +58,9 @@ def config_hostapd():
 					break;
 				else:
 					print 'Invalid Input\n:',
-	write_hostapd_conf()
+	write_hostapd_conf(config)
 
-def write_hostapd_conf():
+def write_hostapd_conf(config):
 	print '\nConfirm Write? [y/N] ? ',
 	ch = raw_input()
 	if ch == 'y' or ch == 'Y':

@@ -1,7 +1,6 @@
-* non-interactive options
-	* start
-	* stop
-	* restart
 * dhcp configuration
 * add checks for KeyboardInterrupts and file existance
 * document
+* Usage
+* non interactive edit
+	- ssid,wpa

@@ -2,6 +2,7 @@
 import subprocess;
 from time import sleep
 from config import IN,OUT,IP,NETMASK
+import sys
 def start_hostapd():
 	"""
 	Starts Hostapd
@@ -10,7 +11,8 @@ def start_hostapd():
 	try:
 		with open('/etc/py_hostapd.conf') as f: pass
 	except IOError as e:
-		print 'No config file exists!' # do you want to create one?
+		print 'No config file exists!'
+		sys.exit(1)
 	print 'configuring',IN,'...'
 	setup_wlan = subprocess.Popen(['ifconfig', IN, 'up', IP, 'netmask', NETMASK])
 	sleep(1)
