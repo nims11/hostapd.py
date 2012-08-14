@@ -1,4 +1,5 @@
 #!/usr/bin/env python2.7
+from common_methods import exit_script
 config_order = ('interface', 'driver', 'ssid', 'hw_mode', 'channel', 'macaddr_acl', 'auth_algs', 'ignore_broadcast_ssid', 'wpa', 'wpa_passphrase', 'wpa_key_mgmt', 'wpa_pairwise', 'rsn_pairwise')
 config_template = {	
 		'interface' : {'type' : 0, 'default' : 'wlan0'},
@@ -44,13 +45,19 @@ def config_hostapd():
 		print '[ default =', config_template[attribute]['default'],']\n',':',
 		
 		if config_template[attribute]['type'] == 0:
-			foo = raw_input()
+			try:
+				foo = raw_input()
+			except KeyboardInterrupt:
+				exit_script()
 			if len(foo) == 0:
 				foo = config_template[attribute]['default']
 			config.append((attribute,foo))
 		elif config_template[attribute]['type'] == 1:
 			while True:
-				foo = raw_input()
+				try:
+					foo = raw_input()
+				except KeyboardInterrupt:
+					exit_script()
 				if len(foo) == 0:
 					foo = config_template[attribute]['default']
 				if foo in config_template[attribute]['choices']:
@@ -70,7 +77,10 @@ def write_hostapd_conf(config):
 def change_attr(attr):
 	print '\nEnter New',attr,': ',
 	while True:
-		new_attr = raw_input()
+		try:
+			new_attr = raw_input()
+		except KeyboardInterrupt:
+			exit_script()
 		if len(new_attr) !=0:
 			break;
 	new_content = ""

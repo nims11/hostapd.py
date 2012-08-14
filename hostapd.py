@@ -3,11 +3,9 @@ import sys
 from HPS import start_hostapd, stop_hostapd, restart_hostapd
 from config_hostapd import config_hostapd, config_hostapd_default, change_attr
 from functools import partial
+from common_methods import exit_script
 #from config_dhcpd import config_dhcpd
 
-def exit_script():
-	print '\nGoodbye!'
-	sys.exit()
 def config_interactive():
 	print '\nConfigure...\n'
 	print '1= Configure hostapd.conf; ',
