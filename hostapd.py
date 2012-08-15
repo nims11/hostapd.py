@@ -3,7 +3,7 @@ import sys
 from HPS import start_hostapd, stop_hostapd, restart_hostapd
 from config_hostapd import config_hostapd, config_hostapd_default, change_attr
 from functools import partial
-from common_methods import exit_script
+from common_methods import exit_script, display_usage
 #from config_dhcpd import config_dhcpd
 
 def config_interactive():
@@ -95,9 +95,14 @@ def main():
 	actions = { 'start' : start_hostapd,
 			'stop' : stop_hostapd,
 			'restart' : restart_hostapd,
+			'usage' : display_usage,
+			#'config' : ,
 			}
 	if sys.argv[1] in actions:
 		actions[sys.argv[1]]()
+	else:
+		print '[ERROR] Invalid Argument\n'
+		display_usage()
 
 if __name__ == '__main__':
 	main()
