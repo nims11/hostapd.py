@@ -11,7 +11,7 @@ def start_hostapd():
 	try:
 		with open('/etc/py_hostapd.conf') as f: pass
 	except IOError as e:
-		print 'No config file exists!'
+		print '[ERROR] /etc/py_hostapd.conf doesn\'t exist'
 		sys.exit(1)
 	print 'configuring',IN,'...'
 	setup_wlan = subprocess.Popen(['ifconfig', IN, 'up', IP, 'netmask', NETMASK])

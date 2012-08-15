@@ -1,5 +1,4 @@
 * dhcp configuration
-* add checks for KeyboardInterrupts and file existance
 * document
 * Usage
 * non interactive edit

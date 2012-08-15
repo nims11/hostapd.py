@@ -84,7 +84,7 @@ def main():
 	try:
 		with open('/etc/py_hostapd.conf') as f: pass
 	except IOError as e:
-		print "/etc/py_hostapd.conf Not Found!"
+		print "[ERROR] /etc/py_hostapd.conf Not Found!"
 		config_hostapd_default()
 	if len(sys.argv) == 1:
 		while True:

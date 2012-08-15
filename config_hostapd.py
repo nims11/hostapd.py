@@ -1,5 +1,6 @@
 #!/usr/bin/env python2.7
 from common_methods import exit_script
+import sys
 config_order = ('interface', 'driver', 'ssid', 'hw_mode', 'channel', 'macaddr_acl', 'auth_algs', 'ignore_broadcast_ssid', 'wpa', 'wpa_passphrase', 'wpa_key_mgmt', 'wpa_pairwise', 'rsn_pairwise')
 config_template = {	
 		'interface' : {'type' : 0, 'default' : 'wlan0'},
@@ -71,9 +72,13 @@ def write_hostapd_conf(config):
 	print '\nConfirm Write? [y/N] ? ',
 	ch = raw_input()
 	if ch == 'y' or ch == 'Y':
-		with open('/etc/py_hostapd.conf', 'w') as f:
-			for attr in config:
-				f.write( str(attr[0]) + '=' + str(attr[1]) + '\n' )
+		try:
+			with open('/etc/py_hostapd.conf', 'w') as f:
+				for attr in config:
+					f.write( str(attr[0]) + '=' + str(attr[1]) + '\n' )
+		except:
+			print '[ERROR] Failed to open /etc/py_hostapd.conf'
+			sys.exit(1)
 def change_attr(attr):
 	print '\nEnter New',attr,': ',
 	while True:
@@ -84,13 +89,17 @@ def change_attr(attr):
 		if len(new_attr) !=0:
 			break;
 	new_content = ""
-	with open('/etc/py_hostapd.conf','r+') as f:
-		for line in f:
-			if line.find(attr) != 0:
-				new_content += line
-			else:
-				new_content += attr + '=' + new_attr + "\n"
-		f.seek(0)
+	try:
+		with open('/etc/py_hostapd.conf','r+') as f:
+			for line in f:
+				if line.find(attr) != 0:
+					new_content += line
+				else:
+					new_content += attr + '=' + new_attr + "\n"
+			f.seek(0)
+	except:
+		print '[ERROR] Failed to open /etc/py_hostapd.conf'
+		sys.exit(1)
 	f = open('/etc/py_hostapd.conf','w')
 	f.write(new_content)
 	f.close()
