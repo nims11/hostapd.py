@@ -1,0 +1,5 @@
+name = 'hostapd.py'
+description = 'A hostapd manager written in python'
+version = '0.5'
+author = 'Nimesh Ghelani (nims11)'
+email = 'nimeshghelani@gmail.com'
