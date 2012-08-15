@@ -1,7 +1,13 @@
 #!/usr/bin/env python2.7
 from common_methods import exit_script
 import sys
+
+# config_order specifies the attribute and their order in which the wizard processes them
 config_order = ('interface', 'driver', 'ssid', 'hw_mode', 'channel', 'macaddr_acl', 'auth_algs', 'ignore_broadcast_ssid', 'wpa', 'wpa_passphrase', 'wpa_key_mgmt', 'wpa_pairwise', 'rsn_pairwise')
+
+# config_template specifies the attribute type, default value and available choices
+# type 0 means that the attribute doesn't have any limited choices as their values
+# type 1 means that the attribute value should be from one of the values specified by 'choices' list
 config_template = {	
 		'interface' : {'type' : 0, 'default' : 'wlan0'},
 		'driver' : {'type' : 0, 'default' : 'nl80211'},
@@ -19,7 +25,7 @@ config_template = {
 		}
 def config_hostapd_default():
 	"""
-	Config default
+	Config using the default values for the attributes
 	"""
 	config = []
 	for attribute in config_order:
@@ -69,6 +75,9 @@ def config_hostapd():
 	write_hostapd_conf(config)
 
 def write_hostapd_conf(config):
+	"""
+	Writes the config data to /etc/py_hostapd.conf
+	"""
 	print '\nConfirm Write? [y/N] ? ',
 	ch = raw_input()
 	if ch == 'y' or ch == 'Y':
@@ -80,6 +89,9 @@ def write_hostapd_conf(config):
 			print '[ERROR] Failed to open /etc/py_hostapd.conf'
 			sys.exit(1)
 def change_attr(attr):
+	"""
+	Changes the 'attr' attribute in /etc/py_hostapd.conf
+	"""
 	print '\nEnter New',attr,': ',
 	while True:
 		try:
@@ -100,9 +112,12 @@ def change_attr(attr):
 	except:
 		print '[ERROR] Failed to open /etc/py_hostapd.conf'
 		sys.exit(1)
-	f = open('/etc/py_hostapd.conf','w')
-	f.write(new_content)
-	f.close()
+	try:
+		with open('/etc/py_hostapd.conf','w') as f:
+			f.write(new_content)
+	except:
+		print '[ERROR] Failed to open /etc/py_hostapd.conf'
+		sys.exit(1)
 
 if __name__ == '__main__':
 	config_hostapd()

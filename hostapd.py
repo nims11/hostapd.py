@@ -7,6 +7,9 @@ from common_methods import exit_script
 #from config_dhcpd import config_dhcpd
 
 def config_interactive():
+	"""
+	Interactive Config mode
+	"""
 	print '\nConfigure...\n'
 	print '1= Configure hostapd.conf; ',
 	print '2= Configure dhcpd.conf; ',

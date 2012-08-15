@@ -13,14 +13,20 @@ def start_hostapd():
 	except IOError as e:
 		print '[ERROR] /etc/py_hostapd.conf doesn\'t exist'
 		sys.exit(1)
+	
+	# Configure network interface
 	print 'configuring',IN,'...'
 	setup_wlan = subprocess.Popen(['ifconfig', IN, 'up', IP, 'netmask', NETMASK])
 	sleep(1)
 	dhcp_log = open('./dhcp.log', 'w')
+
+	# Start dhcpd
 	print 'Starting dhcpd...'
 	dhcp_proc = subprocess.Popen(['dhcpd',IN],stdout = dhcp_log, stderr = dhcp_log) 
 	sleep(1)
 	dhcp_log.close();
+
+	# Configure iptables
 	print 'Configuring iptables...'
 	subprocess.call(['iptables','--flush'])
 	subprocess.call(['iptables','--table','nat','--flush'])
@@ -30,6 +36,7 @@ def start_hostapd():
 	subprocess.call(['iptables','--append','FORWARD','--in-interface',IN,'-j','ACCEPT'])
 	subprocess.call(['sysctl','-w','net.ipv4.ip_forward=1'])
 	
+	# Start hostapd
 	print 'Starting Hostapd...'
 	hostapd_proc = subprocess.Popen(['hostapd -t -d /etc/py_hostapd.conf >./hostapd.log'],shell=True)
 	print 'Done... (Hopefully!)'
