@@ -88,10 +88,7 @@ def write_hostapd_conf(config):
 		except:
 			print '[ERROR] Failed to open /etc/py_hostapd.conf'
 			sys.exit(1)
-def change_attr(attr):
-	"""
-	Changes the 'attr' attribute in /etc/py_hostapd.conf
-	"""
+def change_attr_interactive(attr):
 	print '\nEnter New',attr,': ',
 	while True:
 		try:
@@ -100,6 +97,12 @@ def change_attr(attr):
 			exit_script()
 		if len(new_attr) !=0:
 			break;
+	change_attr(attr,new_attr)
+
+def change_attr(attr,new_attr):
+	"""
+	Changes the 'attr' attribute in /etc/py_hostapd.conf
+	"""
 	new_content = ""
 	try:
 		with open('/etc/py_hostapd.conf','r+') as f:

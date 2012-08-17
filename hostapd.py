@@ -1,7 +1,7 @@
 #!/usr/bin/env python2.7
 import sys
 from HPS import start_hostapd, stop_hostapd, restart_hostapd
-from config_hostapd import config_hostapd, config_hostapd_default, change_attr
+from config_hostapd import config_hostapd, config_hostapd_default, change_attr, change_attr_interactive
 from functools import partial
 from common_methods import exit_script, display_usage
 #from config_dhcpd import config_dhcpd
@@ -29,8 +29,8 @@ def config_interactive():
 	options = { 0 : exit_script,
 			1 : config_hostapd,
 			#2 : config_dhcpd,
-			3 : partial(change_attr,'ssid'),
-			4 : partial(change_attr,'wpa_passphrase'),
+			3 : partial(change_attr_interactive,'ssid'),
+			4 : partial(change_attr_interactive,'wpa_passphrase'),
 			}
 	while ch not in options:
 		print 'Invalid Option'
