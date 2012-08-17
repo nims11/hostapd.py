@@ -78,9 +78,9 @@ def interactive():
 		except KeyboardInterrupt:
 			exit_script()
 		except:
-			continue;
+			continue
 	
-	options[ch]();
+	options[ch]()
 
 
 def main():

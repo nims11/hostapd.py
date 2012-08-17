@@ -103,6 +103,13 @@ def change_attr(attr,new_attr):
 	"""
 	Changes the 'attr' attribute in /etc/py_hostapd.conf
 	"""
+	if attr not in config_template:
+		print '[ERROR] Invalid attribute \'',attr,'\''
+		sys.exit(1)
+	if config_template[attr]['type'] == 1 and new_attr not in config_template[attr]['choices']:
+		print '[ERROR] Invalid attribute value \'',new_attr,'\''
+		sys.exit(1)
+
 	new_content = ""
 	try:
 		with open('/etc/py_hostapd.conf','r+') as f:
