@@ -1,5 +1,5 @@
 #!/usr/bin/env python2.7
-from common_methods import exit_script
+from common_methods import exit_script, display_usage
 import sys
 
 # config_order specifies the attribute and their order in which the wizard processes them
@@ -88,6 +88,14 @@ def write_hostapd_conf(config):
 		except:
 			print '[ERROR] Failed to open /etc/py_hostapd.conf'
 			sys.exit(1)
+
+def config_non_interactive():
+	if len(sys.argv) < 4:
+		print '[ERROR] Missing arguments'
+		display_usage()
+		sys.exit(1)
+	change_attr(sys.argv[2],sys.argv[3])
+
 def change_attr_interactive(attr):
 	print '\nEnter New',attr,': ',
 	while True:
@@ -105,9 +113,11 @@ def change_attr(attr,new_attr):
 	"""
 	if attr not in config_template:
 		print '[ERROR] Invalid attribute \'',attr,'\''
+		display_usage()
 		sys.exit(1)
 	if config_template[attr]['type'] == 1 and new_attr not in config_template[attr]['choices']:
 		print '[ERROR] Invalid attribute value \'',new_attr,'\''
+		display_usage()
 		sys.exit(1)
 
 	new_content = ""

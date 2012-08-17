@@ -1,7 +1,7 @@
 #!/usr/bin/env python2.7
 import sys
 from HPS import start_hostapd, stop_hostapd, restart_hostapd
-from config_hostapd import config_hostapd, config_hostapd_default, change_attr, change_attr_interactive
+from config_hostapd import config_hostapd, config_hostapd_default, change_attr, change_attr_interactive, config_non_interactive
 from functools import partial
 from common_methods import exit_script, display_usage
 #from config_dhcpd import config_dhcpd
@@ -96,8 +96,9 @@ def main():
 			'stop' : stop_hostapd,
 			'restart' : restart_hostapd,
 			'usage' : display_usage,
-			#'config' : ,
+			'config' : config_non_interactive,
 			}
+
 	if sys.argv[1] in actions:
 		actions[sys.argv[1]]()
 	else:
