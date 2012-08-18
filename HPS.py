@@ -1,7 +1,8 @@
 #!/usr/bin/env python2.7
-import subprocess;
+import subprocess
 from time import sleep
 from config import IN,OUT,IP,NETMASK
+from common_methods import exit_script
 import sys
 def start_hostapd():
 	"""
@@ -11,8 +12,7 @@ def start_hostapd():
 	try:
 		with open('/etc/py_hostapd.conf') as f: pass
 	except IOError as e:
-		print '[ERROR] /etc/py_hostapd.conf doesn\'t exist'
-		sys.exit(1)
+		exit_error('[ERROR] /etc/py_hostapd.conf doesn\'t exist')
 	
 	# Configure network interface
 	print 'configuring',IN,'...'
@@ -47,7 +47,6 @@ def stop_hostapd():
 	Stops Hostapd and dhcpd
 	"""
 	print
-
 	print 'Killing Hostapd...'
 	subprocess.call(['killall','hostapd'])
 	print 'Killing dhcpd...'
@@ -56,5 +55,7 @@ def stop_hostapd():
 
 def restart_hostapd():
 	stop_hostapd()
+	# Workaround for issues with dhcpd
 	sleep(2)
+
 	start_hostapd()

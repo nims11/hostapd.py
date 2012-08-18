@@ -1,5 +1,10 @@
 import sys
 import app_info
+def exit_error(msg, err_no = 0):
+	print msg
+	if err_no == 1:
+		display_usage()
+	sys.exit(1)
 def exit_script():
 	print '\nGoodbye!'
 	sys.exit()

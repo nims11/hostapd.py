@@ -1,9 +1,9 @@
 #!/usr/bin/env python2.7
-from common_methods import exit_script, display_usage
+from common_methods import exit_script, display_usage, exit_error
 import sys
 
 # config_order specifies the attribute and their order in which the wizard processes them
-config_order = ('interface', 'driver', 'ssid', 'hw_mode', 'channel', 'macaddr_acl', 'auth_algs', 'ignore_broadcast_ssid', 'wpa', 'wpa_passphrase', 'wpa_key_mgmt', 'wpa_pairwise', 'rsn_pairwise')
+config_order = ('interface', 'driver', 'ssid', 'hw_mode','ieee80211n', 'channel', 'macaddr_acl', 'auth_algs', 'ignore_broadcast_ssid', 'wpa', 'wpa_passphrase', 'wpa_key_mgmt', 'wpa_pairwise', 'rsn_pairwise')
 
 # config_template specifies the attribute type, default value and available choices
 # type 0 means that the attribute doesn't have any limited choices as their values
@@ -12,7 +12,8 @@ config_template = {
 		'interface' : {'type' : 0, 'default' : 'wlan0'},
 		'driver' : {'type' : 0, 'default' : 'nl80211'},
 		'ssid' : {'type' : 0, 'default' : 'test'},
-		'hw_mode' : {'type' : 1, 'default' : 'g', 'choices' : ['a','b','g','n']},
+		'hw_mode' : {'type' : 1, 'default' : 'g', 'choices' : ['a','b','g']},
+		'ieee80211n' : {'type' : 1, 'default' : 0, 'choices' : ['0','1']},
 		'channel' : {'type' : 1, 'default' : '6', 'choices' : [str(x) for x in range(1,12)]},
 		'macaddr_acl' : {'type' : 1, 'default' : '0', 'choices' : ['0','1','2']},
 		'auth_algs' : {'type' : 1, 'default' : '1', 'choices' : ['1','2','3']},
@@ -86,14 +87,11 @@ def write_hostapd_conf(config):
 				for attr in config:
 					f.write( str(attr[0]) + '=' + str(attr[1]) + '\n' )
 		except:
-			print '[ERROR] Failed to open /etc/py_hostapd.conf'
-			sys.exit(1)
+			exit_error('[ERROR] Failed to open /etc/py_hostapd.conf')
 
 def config_non_interactive():
 	if len(sys.argv) < 4:
-		print '[ERROR] Missing arguments'
-		display_usage()
-		sys.exit(1)
+		exit_error('[ERROR] Missing arguments', 1)
 	change_attr(sys.argv[2],sys.argv[3])
 
 def change_attr_interactive(attr):
@@ -112,13 +110,9 @@ def change_attr(attr,new_attr):
 	Changes the 'attr' attribute in /etc/py_hostapd.conf
 	"""
 	if attr not in config_template:
-		print '[ERROR] Invalid attribute \'',attr,'\''
-		display_usage()
-		sys.exit(1)
+		exit_error('[ERROR] Invalid attribute \'',attr,'\'', 1)
 	if config_template[attr]['type'] == 1 and new_attr not in config_template[attr]['choices']:
-		print '[ERROR] Invalid attribute value \'',new_attr,'\''
-		display_usage()
-		sys.exit(1)
+		exit_error('[ERROR] Invalid attribute value \'',new_attr,'\'',1)
 
 	new_content = ""
 	try:
@@ -130,14 +124,12 @@ def change_attr(attr,new_attr):
 					new_content += attr + '=' + new_attr + "\n"
 			f.seek(0)
 	except:
-		print '[ERROR] Failed to open /etc/py_hostapd.conf'
-		sys.exit(1)
+		exit_error('[ERROR] Failed to open /etc/py_hostapd.conf')
 	try:
 		with open('/etc/py_hostapd.conf','w') as f:
 			f.write(new_content)
 	except:
-		print '[ERROR] Failed to open /etc/py_hostapd.conf'
-		sys.exit(1)
+		exit_error('[ERROR] Failed to open /etc/py_hostapd.conf')
 
 if __name__ == '__main__':
 	config_hostapd()
