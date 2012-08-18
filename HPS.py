@@ -5,7 +5,7 @@ from config import IN,OUT,IP,NETMASK
 import sys
 def start_hostapd():
 	"""
-	Starts Hostapd
+	Configs the IN interface, starts dhcpd, configs iptables, Starts Hostapd
 	"""
 	print
 	try:
@@ -56,4 +56,5 @@ def stop_hostapd():
 
 def restart_hostapd():
 	stop_hostapd()
+	sleep(2)
 	start_hostapd()
