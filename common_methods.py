@@ -9,6 +9,7 @@ def display_usage():
 	print 'Version :', app_info.version
 	print 'by', app_info.author
 	print 'email:', app_info.email
+	print 'github page:',app_info.github
 	print
 	print 'Usage :',
 	print 'hostapd.py [action] [<options>...]'
