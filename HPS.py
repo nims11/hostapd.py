@@ -1,9 +1,15 @@
 #!/usr/bin/env python2.7
 import subprocess
 from time import sleep
-from config import IN,OUT,IP,NETMASK
+from config import network_settings
 from common_methods import exit_script
 import sys
+
+IN = network_settings['IN']
+OUT = network_settings['OUT']
+IP = network_settings['IP']
+NETMASK = network_settings['NETMASK']
+
 def start_hostapd():
 	"""
 	Configs the IN interface, starts dhcpd, configs iptables, Starts Hostapd
