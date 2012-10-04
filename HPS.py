@@ -3,17 +3,19 @@ import subprocess
 from time import sleep
 from config import network_settings
 from common_methods import exit_script
+from dhcpd_config import gen_dhcpd
 import sys
 
 IN = network_settings['IN']
 OUT = network_settings['OUT']
-IP = network_settings['IP']
-NETMASK = network_settings['NETMASK']
+IP = network_settings['IP_WLAN']
+NETMASK = network_settings['$IP_NETMASK$']
 
 def start_hostapd():
 	"""
 	Configs the IN interface, starts dhcpd, configs iptables, Starts Hostapd
 	"""
+	gen_dhcpd()
 	print
 	try:
 		with open('/etc/py_hostapd.conf') as f: pass
@@ -28,7 +30,7 @@ def start_hostapd():
 
 	# Start dhcpd
 	print 'Starting dhcpd...'
-	dhcp_proc = subprocess.Popen(['dhcpd',IN],stdout = dhcp_log, stderr = dhcp_log) 
+	dhcp_proc = subprocess.Popen(['dhcpd',IN, '-cf', '/etc/py_dhcpd.conf'],stdout = dhcp_log, stderr = dhcp_log) 
 	sleep(1)
 	dhcp_log.close();
 

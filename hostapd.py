@@ -4,7 +4,6 @@ from HPS import start_hostapd, stop_hostapd, restart_hostapd
 from config_hostapd import config_hostapd, config_hostapd_default, change_attr, change_attr_interactive, config_non_interactive
 from functools import partial
 from common_methods import exit_script, display_usage
-#from config_dhcpd import config_dhcpd
 
 def config_interactive():
 	"""
@@ -12,9 +11,8 @@ def config_interactive():
 	"""
 	print '\nConfigure...\n'
 	print '1= Configure hostapd.conf; ',
-	print '2= Configure dhcpd.conf; ',
-	print '3= Change ssid;',
-	print '4= Change WPA passphrase;',
+	print '2= Change ssid;',
+	print '3= Change WPA passphrase;',
 	print '0= exit'
 	while True:
 		try:
@@ -29,8 +27,8 @@ def config_interactive():
 	options = { 0 : exit_script,
 			1 : config_hostapd,
 			#2 : config_dhcpd,
-			3 : partial(change_attr_interactive,'ssid'),
-			4 : partial(change_attr_interactive,'wpa_passphrase'),
+			2 : partial(change_attr_interactive,'ssid'),
+			3 : partial(change_attr_interactive,'wpa_passphrase'),
 			}
 	while ch not in options:
 		print 'Invalid Option'

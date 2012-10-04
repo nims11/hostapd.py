@@ -1,28 +1,19 @@
 from common_methods import exit_script
+from config import network_settings, dhcpd_template
 import sys
 
-# dhcpd_template holds the basic layout for the /etc/py_hostapd_dhcpd.conf
-# variables are enclosed within '$'s
-dhcpd_template ='ddns-update-style none;'
-'ignore client-updates;'
-'authoritative;'
-'option local-wpad code 252 = text;'
-'subnet'
-'$IP_subnet$ netmask $NETMASK$ {'
-'option routers'
-'$IP_router$;'
-'option subnet-mask'
-'$NETMASK$;'
-'option broadcast-address'
-'$IP_broadcast$;'
-'option domain-name'
-'"localhost";'
-'option domain-name-servers'
-'$IP_router$, $DNS_1$, $DNS_2$;'
-'option time-offset'
-'0;'
-'range $IP_range_min$ $IP_range_max$;'
-'default-lease-time 1209600;'
-'max-lease-time 1814400;'
-'}'
+def gen_dhcpd():
+	content = dhcpd_template[:]
+	for key in network_settings.keys():
+		if key[0]=='$' and key[len(key)-1]=='$':
+			content = content.replace(key, network_settings[key])
+	write_dhcpd(content)
+
+def write_dhcpd(content):
+	try:
+		with open('/etc/py_dhcpd.conf', 'w') as f:
+			f.write( content )
+	except:
+		exit_error('[ERROR] Failed to open /etc/py_dhcpd.conf')
+
 
