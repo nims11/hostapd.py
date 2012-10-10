@@ -70,9 +70,20 @@ def write_hostapd_conf(config):
 			exit_error('[ERROR] Failed to open /etc/py_hostapd.conf')
 
 def config_non_interactive():
-	if len(sys.argv) < 4:
-		exit_error('[ERROR] Missing arguments', 1)
-	change_attr(sys.argv[2],sys.argv[3])
+	if len(sys.argv) == 3:
+		if sys.argv[2] == 'wizard':
+			config_hostapd()
+		elif sys.argv[2] == 'defaults':
+			config_hostapd_default()
+		else:
+			exit_error('[ERROR] Missing/Too Many arguments', 1)
+	elif len(sys.argv) != 4:
+		exit_error('[ERROR] Missing/Too Many arguments', 1)
+	else:
+		if sys.argv[2] == 'password' or sys.argv[2] == 'key':
+			change_attr('wpa_passphrase',sys.argv[3])
+		else:
+			change_attr(sys.argv[2],sys.argv[3])
 
 def change_attr_interactive(attr):
 	print '\nEnter New',attr,': ',

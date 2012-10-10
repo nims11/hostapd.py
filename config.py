@@ -21,6 +21,8 @@ config_template = {
 		'rsn_pairwise' : {'type' : 1, 'default' : 'CCMP', 'choices' : ['TKIP','CCMP']},
 		}
 
+
+# keys enclosed within '$' are used in the dhcp config file generation
 network_settings = {
 		'IN' : 'wlan0',
 		'OUT' : 'eth0',

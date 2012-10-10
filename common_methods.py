@@ -25,4 +25,4 @@ def display_usage():
 	print 'start'
 	print 'stop'
 	print 'restart'
-	print 'usage'
+	print 'help'

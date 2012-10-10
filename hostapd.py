@@ -93,8 +93,9 @@ def main():
 	actions = { 'start' : start_hostapd,
 			'stop' : stop_hostapd,
 			'restart' : restart_hostapd,
-			'usage' : display_usage,
 			'config' : config_non_interactive,
+			'help' : display_usage,
+			'-h' : display_usage,
 			}
 
 	if sys.argv[1] in actions:
