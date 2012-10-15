@@ -1,8 +1,14 @@
 #!/usr/bin/env python2.7
 from common_methods import exit_script, display_usage, exit_error
 import sys
-from config import config_template, config_order
-def config_hostapd_default():
+from config import config_template, config_order, general_defaults
+def get_general_defaults():
+	content = []
+	for key in general_defaults.keys():
+		content.append((key,general_defaults[key]))
+	return content
+
+def config_hostapd_default(ret = False):
 	"""
 	Config using the default values for the attributes
 	"""
@@ -11,6 +17,8 @@ def config_hostapd_default():
 		value = config_template[attribute]
 		foo = config_template[attribute]['default']
 		config.append((attribute, foo))
+	if ret:
+		return config
 	print 'Writing Default /etc/py_hostapd.conf...'
 	write_hostapd_conf(config)
 

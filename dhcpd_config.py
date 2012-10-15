@@ -1,5 +1,5 @@
 from common_methods import exit_script
-from config import network_settings, dhcpd_template
+from config import network_settings, dhcpd_template, dhcpd_defaults
 import sys
 
 def gen_dhcpd():
@@ -16,4 +16,8 @@ def write_dhcpd(content):
 	except:
 		exit_error('[ERROR] Failed to open /etc/py_dhcpd.conf')
 
-
+def get_dhcpd_defaults():
+	content = []
+	for key in dhcpd_defaults.keys():
+		content.append((key,dhcpd_defaults[key]))
+	return content
