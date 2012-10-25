@@ -1,15 +1,22 @@
+class bcolors:
+	HEADER = '\033[95m'
+	OKBLUE = '\033[94m'
+	OKGREEN = '\033[92m'
+	WARNING = '\033[93m'
+	FAIL = '\033[91m'
+	ENDC = '\033[0m'
+
 # config_order specifies the attribute and their order in which the wizard processes them
-config_order = ('interface', 'driver', 'ssid', 'hw_mode','ieee80211n', 'channel', 'macaddr_acl', 'auth_algs', 'ignore_broadcast_ssid', 'wpa', 'wpa_passphrase', 'wpa_key_mgmt', 'wpa_pairwise', 'rsn_pairwise')
+config_order = ('interface', 'driver', 'ssid', 'hw_mode','channel', 'macaddr_acl', 'auth_algs', 'ignore_broadcast_ssid', 'wpa', 'wpa_passphrase', 'wpa_key_mgmt', 'wpa_pairwise', 'rsn_pairwise')
 
 # config_template specifies the attribute type, default value and available choices
 # type 0 means that the attribute doesn't have any limited choices as their values
 # type 1 means that the attribute value should be from one of the values specified by 'choices' list
-config_template = {	
+hostapd_default = {	
 		'interface' : {'type' : 0, 'default' : 'wlan0'},
 		'driver' : {'type' : 0, 'default' : 'nl80211'},
 		'ssid' : {'type' : 0, 'default' : 'test'},
 		'hw_mode' : {'type' : 1, 'default' : 'g', 'choices' : ['a','b','g']},
-		'ieee80211n' : {'type' : 1, 'default' : '0', 'choices' : ['0','1']},
 		'channel' : {'type' : 1, 'default' : '6', 'choices' : [str(x) for x in range(1,12)]},
 		'macaddr_acl' : {'type' : 1, 'default' : '0', 'choices' : ['0','1','2']},
 		'auth_algs' : {'type' : 1, 'default' : '1', 'choices' : ['1','2','3']},
@@ -42,6 +49,7 @@ general_defaults = {
 	'in' : 'wlan0',
 	'out' : 'eth0',
 	'ip_wlan' : '10.0.0.1',
+	'netmask' : '255.255.255.0',
 }
 
 # dhcpd defaults

@@ -3,20 +3,18 @@ import subprocess
 from time import sleep
 from config import network_settings
 from common_methods import exit_script
-from dhcpd_config import gen_dhcpd
 import sys
-
-IN = network_settings['IN']
-OUT = network_settings['OUT']
-IP = network_settings['IP_WLAN']
-NETMASK = network_settings['$IP_NETMASK$']
+import config_gen
 
 def start_hostapd():
 	"""
 	Configs the IN interface, starts dhcpd, configs iptables, Starts Hostapd
 	"""
-	gen_dhcpd()
-	print
+	global_config = config_gen.get_config()
+	IN = global_config['in']
+	OUT = global_config['out']
+	IP = global_config['ip_wlan']
+	NETMASK = global_config['netmask']
 	try:
 		with open('/etc/py_hostapd.conf') as f: pass
 	except IOError as e:

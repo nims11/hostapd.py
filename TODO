@@ -1,5 +1,5 @@
-* dhcp configuration
-	* Central configuration
 * generalize file locations
-
+* generalize sections
+* rework config system
+* rework config.py
 *** Cleanup & Testing
