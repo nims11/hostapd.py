@@ -1,3 +1,8 @@
+# File locations
+file_hostapd = '/etc/py_hostapd.conf'
+file_dhcpd = '/etc/py_dhcpd.conf'
+file_cfg = '/etc/py_hostapd.cfg'
+
 class bcolors:
 	HEADER = '\033[95m'
 	OKBLUE = '\033[94m'

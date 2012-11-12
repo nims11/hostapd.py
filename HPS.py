@@ -1,7 +1,7 @@
 #!/usr/bin/env python2.7
 import subprocess
 from time import sleep
-from config import network_settings
+import config
 from common_methods import exit_script
 import sys
 import config_gen
@@ -16,9 +16,9 @@ def start_hostapd():
 	IP = global_config['ip_wlan']
 	NETMASK = global_config['netmask']
 	try:
-		with open('/etc/py_hostapd.conf') as f: pass
+		with open(config.file_hostapd) as f: pass
 	except IOError as e:
-		exit_error('[ERROR] /etc/py_hostapd.conf doesn\'t exist')
+		exit_error('[ERROR] ' + config.file_hostapd + ' doesn\'t exist')
 	
 	# Configure network interface
 	print 'configuring',IN,'...'
@@ -28,7 +28,7 @@ def start_hostapd():
 
 	# Start dhcpd
 	print 'Starting dhcpd...'
-	dhcp_proc = subprocess.Popen(['dhcpd',IN, '-cf', '/etc/py_dhcpd.conf'],stdout = dhcp_log, stderr = dhcp_log) 
+	dhcp_proc = subprocess.Popen(['dhcpd',IN, '-cf', config.file_dhcpd],stdout = dhcp_log, stderr = dhcp_log) 
 	sleep(1)
 	dhcp_log.close();
 
@@ -44,7 +44,7 @@ def start_hostapd():
 	
 	# Start hostapd
 	print 'Starting Hostapd...'
-	hostapd_proc = subprocess.Popen(['hostapd -t -d /etc/py_hostapd.conf >./hostapd.log'],shell=True)
+	hostapd_proc = subprocess.Popen(['hostapd -t -d '+config.file_hostapd+' >./hostapd.log'],shell=True)
 	print 'Done... (Hopefully!)'
 	print
 

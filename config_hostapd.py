@@ -8,17 +8,17 @@ def generate_confs():
 	write_dhcpd_conf()
 
 def write_dhcpd_conf():
-	print 'Writing /etc/py_dhcpd.conf...'
+	print 'Writing', config.file_dhcpd, '...'
 	global_config = config_gen.get_config()
 	content = config.dhcpd_template[:]
 	for key in config.dhcpd_defaults.keys():
 		key2 = '$' + key + '$'
 		content = content.replace(key2, global_config[key])
 	try:
-		with open('/etc/py_dhcpd.conf', 'w') as f:
+		with open(config.file_dhcpd, 'w') as f:
 			f.write( content )
 	except:
-		exit_error('[ERROR] Failed to open /etc/py_dhcpd.conf')
+		exit_error('[ERROR] Failed to open ' + config.file_dhcpd)
 
 
 def get_general_defaults():
@@ -49,16 +49,16 @@ def get_hostapd_default():
 
 def write_hostapd_conf():
 	"""
-	Writes the config data to /etc/py_hostapd.conf
+	Writes the config data to', config.file_hostapd
 	"""
-	print 'Writing /etc/py_hostapd.conf...'
+	print 'Writing', config.file_hostapd, '...'
 	global_config = config_gen.get_config()
 	try:
-		with open('/etc/py_hostapd.conf', 'w') as f:
+		with open(config.file_hostapd, 'w') as f:
 			for attr in config.hostapd_default:
 				f.write( attr + '=' + global_config[attr] + '\n' )
 	except:
-		exit_error('[ERROR] Failed to open /etc/py_hostapd.conf')
+		exit_error('[ERROR] Failed to open' + config.file_hostapd)
 def test():
 	config_gen.init()
 	generate_confs()
