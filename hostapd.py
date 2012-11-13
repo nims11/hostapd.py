@@ -10,12 +10,10 @@ def main():
 	The starting base
 	"""
 	config_gen.init()
-	generate_confs()
-
 	actions = { 'start' : start_hostapd,
 			'stop' : stop_hostapd,
 			'restart' : restart_hostapd,
-			#'config' : config_non_interactive,
+			'config' : config_gen.config_cli,
 			'help' : display_usage,
 			'-h' : display_usage,
 			}

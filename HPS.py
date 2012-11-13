@@ -10,6 +10,7 @@ def start_hostapd():
 	"""
 	Configs the IN interface, starts dhcpd, configs iptables, Starts Hostapd
 	"""
+	generate_confs()
 	global_config = config_gen.get_config()
 	IN = global_config['in']
 	OUT = global_config['out']
@@ -22,7 +23,7 @@ def start_hostapd():
 	
 	# Configure network interface
 	print 'configuring',IN,'...'
-	setup_wlan = subprocess.Popen(['ifconfig', IN, 'up', IP, 'netmask', NETMASK])
+	subprocess.call(['ifconfig', IN, 'up', IP, 'netmask', NETMASK])
 	sleep(1)
 	dhcp_log = open('./dhcp.log', 'w')
 
@@ -61,6 +62,7 @@ def stop_hostapd():
 
 def restart_hostapd():
 	stop_hostapd()
+
 	# Workaround for issues with dhcpd
 	sleep(2)
 

@@ -1,5 +1,4 @@
-* generalize file locations
 * generalize sections
+* pid files
 * rework config system
-* rework config.py
 *** Cleanup & Testing
