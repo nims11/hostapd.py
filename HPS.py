@@ -5,6 +5,7 @@ import config
 from common_methods import exit_script
 import sys
 import config_gen
+from config_hostapd import generate_confs
 
 def start_hostapd():
 	"""
