@@ -19,8 +19,6 @@ def display_usage():
 	print 'Usage :'
 	print '   hostapd.py [action] [<options>...]'
 	print
-	print 'No attributes will start hostapd.py in interactive mode'
-	print
 	print 'Following actions are currently supported:'
 	print '   start'
 	print '   stop'
