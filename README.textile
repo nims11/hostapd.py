@@ -16,19 +16,19 @@ hostapd.py requires root privileges to work.
 
 chmod +x hostapd.py
 Usage :
-   hostapd.py [action] [<notextile><options><notextile>...]
+   * hostapd.py [action] [<notextile><options><notextile>...]
 
 Following actions are currently supported:
-   start
-   stop
-   restart
-   config
-   help
+   * start
+   * stop
+   * restart
+   * config
+   * help
 
 Usage for action config:
-   hostapd.py config list                     - list all attributes with values
-   hostapd.py config attrib_name              - shows the value for attrib_name, if set
-   hostapd.py config attrib_name attrib_val   - modifies the value of attrib_name to attrib_val
+   * hostapd.py config list                     - list all attributes with values
+   * hostapd.py config attrib_name              - shows the value for attrib_name, if set
+   * hostapd.py config attrib_name attrib_val   - modifies the value of attrib_name to attrib_val
 
 h2. Additional Reading
 
@@ -38,4 +38,4 @@ It will also help in way to understand the source code of my script better.
 h2. Contribute
 
 Feel free to fork and commit changes to the code. There is a lot of scope for improvement.
-I have only tested this script well enough with ath9k wifi driver under Arch Linux. Help me improve it through bug reports, or even confirmed working report with the environment under which it occured.
+I have only tested this script well enough with ath9k wifi driver. Help me improve it through bug reports, or even confirmed working report with the environment under which it occured.
