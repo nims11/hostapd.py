@@ -7,7 +7,6 @@ def exit_error(msg, err_no = 0):
 		display_usage()
 	sys.exit(1)
 def exit_script():
-	print '\nGoodbye!'
 	sys.exit()
 
 def display_usage():
@@ -26,4 +25,10 @@ def display_usage():
 	print '   start'
 	print '   stop'
 	print '   restart'
+	print '   config'
 	print '   help'
+	print
+	print 'Usage for action config:'
+	print '   hostapd.py config list                     - list all attributes with values'
+	print '   hostapd.py config attrib_name              - shows the value for attrib_name, if set'
+	print '   hostapd.py config attrib_name attrib_val   - modifies the value of attrib_name to attrib_val'
