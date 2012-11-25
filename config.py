@@ -3,6 +3,13 @@ file_hostapd = '/etc/py_hostapd.conf'
 file_dhcpd = '/etc/py_dhcpd.conf'
 file_cfg = '/etc/py_hostapd.cfg'
 
+# Executable locations
+hostapd_path = '/usr/bin/hostapd'
+dhcpd_path = '/usr/sbin/dhcpd'
+ifconfig_path = '/sbin/ifconfig'
+iptables_path = '/usr/sbin/iptables'
+sysctl_path = '/sbin/sysctl'
+
 class bcolors:
 	HEADER = '\033[95m'
 	OKBLUE = '\033[94m'

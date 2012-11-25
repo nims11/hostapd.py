@@ -24,29 +24,29 @@ def start_hostapd():
 	
 	# Configure network interface
 	print 'configuring',IN,'...'
-	subprocess.call(['ifconfig', IN, 'up', IP, 'netmask', NETMASK])
+	subprocess.call([config.ifconfig_path, IN, 'up', IP, 'netmask', NETMASK])
 	sleep(1)
 	dhcp_log = open('./dhcp.log', 'w')
 
 	# Start dhcpd
 	print 'Starting dhcpd...'
-	dhcp_proc = subprocess.Popen(['dhcpd',IN, '-cf', config.file_dhcpd],stdout = dhcp_log, stderr = dhcp_log) 
+	dhcp_proc = subprocess.Popen([config.dhcpd_path,IN, '-cf', config.file_dhcpd],stdout = dhcp_log, stderr = dhcp_log) 
 	sleep(1)
 	dhcp_log.close();
 
 	# Configure iptables
 	print 'Configuring iptables...'
-	subprocess.call(['iptables','--flush'])
-	subprocess.call(['iptables','--table','nat','--flush'])
-	subprocess.call(['iptables','--delete-chain'])
-	subprocess.call(['iptables','--table','nat','--delete-chain'])
-	subprocess.call(['iptables','--table','nat','--append','POSTROUTING','--out-interface',OUT,'-j','MASQUERADE'])
-	subprocess.call(['iptables','--append','FORWARD','--in-interface',IN,'-j','ACCEPT'])
-	subprocess.call(['sysctl','-w','net.ipv4.ip_forward=1'])
+	subprocess.call([config.iptables_path,'--flush'])
+	subprocess.call([config.iptables_path,'--table','nat','--flush'])
+	subprocess.call([config.iptables_path,'--delete-chain'])
+	subprocess.call([config.iptables_path,'--table','nat','--delete-chain'])
+	subprocess.call([config.iptables_path,'--table','nat','--append','POSTROUTING','--out-interface',OUT,'-j','MASQUERADE'])
+	subprocess.call([config.iptables_path,'--append','FORWARD','--in-interface',IN,'-j','ACCEPT'])
+	subprocess.call([config.sysctl_path,'-w','net.ipv4.ip_forward=1'])
 	
 	# Start hostapd
 	print 'Starting Hostapd...'
-	hostapd_proc = subprocess.Popen(['hostapd -t -d '+config.file_hostapd+' >./hostapd.log'],shell=True)
+	hostapd_proc = subprocess.Popen([config.hostapd_path+' -t -d '+config.file_hostapd+' >./hostapd.log'],shell=True)
 	print 'Done... (Hopefully!)'
 	print
 
