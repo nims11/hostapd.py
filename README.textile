@@ -30,7 +30,7 @@ Usage for action config:
    * hostapd.py config attrib_name              - shows the value for attrib_name, if set
    * hostapd.py config attrib_name attrib_val   - modifies the value of attrib_name to attrib_val
 
-h2, Configuring
+h2. Configuring
 
 hostapd.py generates the config file for hostapd and dhcpd each time it starts using /etc/py_hostapd.cfg, edit that file to make changes or use the config action in the script. You may also tweak the config.py file to suit your needs.
 
