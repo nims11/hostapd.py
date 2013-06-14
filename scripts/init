@@ -1,0 +1,19 @@
+#!/bin/bash
+#Initial wifi interface configuration
+ERRORUSG=100
+ERRORROOT=101
+if [ $EUID != 0 ]; then
+	echo "Error: root privilege needed"
+	exit $ERRORROOT
+fi
+if [ $# != 3 ]
+then
+	echo "Usage: `basename $0` INTERFACE IP NETMASK"
+	exit $ERRORUSG
+fi
+
+INTERFACE=$1
+IP=$2
+NETMASK=$3
+
+ifconfig $INTERFACE up $IP  netmask $NETMASK
