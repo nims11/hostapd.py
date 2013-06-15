@@ -60,3 +60,6 @@ dhcp_defaults = {
 nat_defaults = {
 		'SCRIPT' : 'scripts/nat',
 }
+
+# Specific config options
+special_options = ['script', 'template_config', 'output_config']

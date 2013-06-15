@@ -4,23 +4,31 @@ import sys
 import config
 import config_gen
 def generate_confs():
-	write_hostapd_conf()
-	write_dhcpd_conf()
-
-def write_dhcpd_conf():
-	print 'Writing', config.file_dhcpd, '...'
 	global_config = config_gen.get_config()
-	content = config.dhcpd_template[:]
-	for key in config.dhcpd_defaults.keys():
-		key2 = '$' + key + '$'
-		content = content.replace(key2, global_config[key])
-	try:
-		with open(config.file_dhcpd, 'w') as f:
-			f.write( content )
-	except:
-		exit_error('[ERROR] Failed to open ' + config.file_dhcpd)
+	for section in global_config.keys():
+		if global_config[section].has_key('template_config'):
+			if not global_config[section].has_key('output_config'):
+				exit_error("[ERROR] 'output_config' not specified for '" + section + "'")
+			template_file = global_config[section]['template_config']
+			template_str = ''
+			try:
+				with open(template_file) as f:
+					template_str = f.read()
+			except:
+				exit_error("[ERROR] Template File for '" + section + "', " + template_file + " does not exist") 
 
+			for key, val in global_config[section].items():
+				template_str = template_str.replace('$' + key + '$', val)
 
+			try:
+				with open(global_config[section]['output_config'], 'wb') as f:
+					print 'Writing', f.name, '...'
+					f.write(template_str)
+			except:
+				exit_error("[ERROR] Failed to open output_config '" + global_config[section]['output_config'] + "' in write mode")
+		elif section == 'HOSTAPD':
+			write_hostapd_conf(global_config)
+			
 def get_general_defaults():
 	content = []
 	for tup in config.general_defaults.items():
@@ -46,18 +54,16 @@ def get_nat_defaults():
 	return content
 
 
-def write_hostapd_conf():
-	"""
-	Writes the config data to', config.file_hostapd
-	"""
-	print 'Writing', config.file_hostapd, '...'
-	global_config = config_gen.get_config()
+def write_hostapd_conf(global_config):
+	config_output = global_config['HOSTAPD']['output_config']
+	print 'Writing', config_output, '...'
 	try:
-		with open(config.file_hostapd, 'w') as f:
-			for attr in config.hostapd_default:
-				f.write( attr + '=' + global_config[attr] + '\n' )
+		with open(config_output, 'w') as f:
+			for key, val in global_config['HOSTAPD'].items():
+				if key not in config.special_options:
+					f.write( key + '=' + val + '\n' )
 	except:
-		exit_error('[ERROR] Failed to open' + config.file_hostapd)
+		exit_error('[ERROR] Failed to open ' + config_output + ' in write mode')
 def test():
 	config_gen.init()
 	generate_confs()

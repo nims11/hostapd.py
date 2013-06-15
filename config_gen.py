@@ -35,17 +35,24 @@ def config_cli():
 	else:
 		common_methods.exit_error('[ERROR] config: incorrect usage', 1)
 def read_default_cfg():
+	"""
+	Write to default_config
+	"""
 	global default_config
-	default_config = {'HOSTAPD' : config_hostapd.get_hostapd_defaults(),
+	default_config = {
+			'HOSTAPD' : config_hostapd.get_hostapd_defaults(),
 			'DHCP' : config_hostapd.get_dhcp_defaults(),
 			'GENERAL' : config_hostapd.get_general_defaults(),
 			'NAT' : config_hostapd.get_nat_defaults(),
 			}
+	for section in default_config.keys():
+		default_config[section] = dict(default_config[section])
 
 def gen_default_cfg():
 	write_cfg(default_config['HOSTAPD'], 'HOSTAPD')
-	write_cfg(default_config['DHCPD'], 'DHCPD')
+	write_cfg(default_config['DHCP'], 'DHCP')
 	write_cfg(default_config['GENERAL'], 'GENERAL')
+	write_cfg(default_config['NAT'], 'NAT')
 
 def write_cfg(content, section):
 	configparser = ConfigParser.ConfigParser()
@@ -69,22 +76,25 @@ def write_cfg(content, section):
 	print bcolors.OKGREEN, 'Done!', bcolors.ENDC
 
 def read_cfg():
+	"""
+	Initially copies the default_config to global_config and then overwrite values found from config file
+	"""
+	import copy
 	global global_config
-	global_config1 = ConfigParser.ConfigParser()
-	global_config1.read(config.file_cfg)
-	tup_list = global_config1.items('HOSTAPD') + global_config1.items('DHCPD') + global_config1.items('GENERAL')
-	global_config = dict(i for i in tup_list)
-	for sections in default_config.keys():
-		for (name, value) in default_config[sections]:
-			if name not in global_config:
-				print name, 'not defined, using default'
-				global_config[name] = value
-	# print global_config, len(global_config)
+	config_parse = ConfigParser.ConfigParser()
+	config_parse.read(config.file_cfg)
+	global_config = copy.deepcopy(default_config)
+	for section in config_parse.sections():
+		for (name, value) in config_parse.items(section):
+			global_config[section][name] = value
 
 def get_config():
 	return global_config
 
 def init():
+	"""
+	If config file exists, reads it, else generates a default one
+	"""
 	read_default_cfg()
 	try:
 		with open(config.file_cfg) as f: pass
