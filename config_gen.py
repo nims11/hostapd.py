@@ -36,9 +36,10 @@ def config_cli():
 		common_methods.exit_error('[ERROR] config: incorrect usage', 1)
 def read_default_cfg():
 	global default_config
-	default_config = {'HOSTAPD' : config_hostapd.get_hostapd_default(),
-			'DHCPD' : config_hostapd.get_dhcpd_defaults(),
+	default_config = {'HOSTAPD' : config_hostapd.get_hostapd_defaults(),
+			'DHCP' : config_hostapd.get_dhcp_defaults(),
 			'GENERAL' : config_hostapd.get_general_defaults(),
+			'NAT' : config_hostapd.get_nat_defaults(),
 			}
 
 def gen_default_cfg():

@@ -22,30 +22,29 @@ def write_dhcpd_conf():
 
 
 def get_general_defaults():
-	"""
-	Get Default General config
-	"""
 	content = []
-	for key in config.general_defaults.keys():
-		content.append((key,config.general_defaults[key]))
+	for tup in config.general_defaults.items():
+		content.append(tup)
 	return content
 
-def get_dhcpd_defaults():
+def get_dhcp_defaults():
 	content = []
-	for key in config.dhcpd_defaults.keys():
-		content.append((key,config.dhcpd_defaults[key]))
+	for tup in config.dhcp_defaults.items():
+		content.append(tup)
 	return content
 
-def get_hostapd_default():
-	"""
-	Get Default hostapd config
-	"""
+def get_hostapd_defaults():
 	ret = []
-	for attribute in config.config_order:
-		value = config.hostapd_default[attribute]
-		foo = config.hostapd_default[attribute]['default']
-		ret.append((attribute, foo))
+	for tup in config.hostapd_default.items():
+		ret.append((tup[0], tup[1]['default']))
 	return ret
+
+def get_nat_defaults():
+	content = []
+	for tup in config.nat_defaults.items():
+		content.append(tup)
+	return content
+
 
 def write_hostapd_conf():
 	"""
