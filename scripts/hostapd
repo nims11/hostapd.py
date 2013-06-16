@@ -1,17 +1,4 @@
 #!/bin/bash
 #start hostapd
-ERRORUSG=100
-ERRORROOT=101
-if [ $EUID != 0 ]; then
-	echo "Error: root privilege needed"
-	exit $ERRORROOT
-fi
-if [ $# != 1 ]
-then
-	echo "Usage: `basename $0` CONFIGFILE"
-	exit $ERRORUSG
-fi
-
-CONFIGFILE=$1
-
-hostapd $CONFIGFILE &
+echo 'Starting Hostapd...' > $HOSTAPD_LOGFILE
+hostapd -B $HOSTAPD_OUTPUT_CONFIG &>> $HOSTAPD_LOGFILE

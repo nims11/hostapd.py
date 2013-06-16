@@ -7,7 +7,7 @@ from common_methods import exit_script, display_usage
 
 def main():
 	"""
-	The starting base
+	The starting point
 	"""
 	config_gen.init()
 	actions = { 'start' : start_hostapd,

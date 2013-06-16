@@ -16,6 +16,7 @@ class bcolors:
 hostapd_default = {
 		'OUTPUT_CONFIG' : {'type' : 0, 'default' : '/etc/py_hostapd.conf'},
 		'SCRIPT' : {'type' : 0, 'default' : 'scripts/hostapd'},
+		'EXIT_SCRIPT': {'type' : 0, 'default' : 'scripts/hostapd_exit'},
 		'interface' : {'type' : 0, 'default' : 'wlan0'},
 		'driver' : {'type' : 0, 'default' : 'nl80211'},
 		'ssid' : {'type' : 0, 'default' : 'test'},
@@ -29,6 +30,7 @@ hostapd_default = {
 		'wpa_key_mgmt' : {'type' : 1, 'default' : 'WPA-PSK', 'choices' : ['WPA-PSK','WPA-EAP','WPA-PSK WPA-EAP']},
 		'wpa_pairwise' : {'type' : 1, 'default' : 'TKIP', 'choices' : ['TKIP','CCMP']},
 		'rsn_pairwise' : {'type' : 1, 'default' : 'CCMP', 'choices' : ['TKIP','CCMP']},
+		'LOGFILE' : {'type' : 0, 'default' : 'logs/hostapd'},
 		}
 
 
@@ -39,6 +41,7 @@ general_defaults = {
 	'out' : 'eth0',
 	'ip_wlan' : '10.0.0.1',
 	'netmask' : '255.255.255.0',
+	'LOGFILE' : 'logs/init',
 }
 
 # dhcp defaults
@@ -46,6 +49,7 @@ dhcp_defaults = {
 	'OUTPUT_CONFIG' : '/etc/py_dhcpd.conf',
 	'TEMPLATE_CONFIG' : 'templates/dhcpd',
 	'SCRIPT' : 'scripts/dhcpd',
+	'EXIT_SCRIPT': 'scripts/dhcpd_exit',
 	'ip_router' : '10.0.0.1',
 	'ip_netmask' : '255.255.255.0',
 	'ip_subnet' : '10.0.0.0',
@@ -54,12 +58,17 @@ dhcp_defaults = {
 	'dns_2' : '8.8.4.4',
 	'ip_range_min' : '10.0.0.3',
 	'ip_range_max' : '10.0.0.12',
+	'LOGFILE' : 'logs/dhcpd',
 }
 
 # NAT defaults
 nat_defaults = {
 		'SCRIPT' : 'scripts/nat',
+		'LOGFILE'  : 'logs/nat',
 }
 
 # Specific config options
-special_options = ['script', 'template_config', 'output_config']
+special_options = ['SCRIPT', 'TEMPLATE_CONFIG', 'OUTPUT_CONFIG', 'EXIT_SCRIPT', 'LOGFILE']
+
+# Script Execution order
+script_order = ['GENERAL', 'DHCP', 'NAT', 'HOSTAPD']

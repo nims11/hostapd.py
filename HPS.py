@@ -2,53 +2,32 @@
 import subprocess
 from time import sleep
 import config
-from common_methods import exit_script
+from common_methods import exit_script, exit_error
 import sys
 import config_gen
 from config_hostapd import generate_confs
+import shlex
+import os
 
 def start_hostapd():
 	"""
 	Configs the IN interface, starts dhcpd, configs iptables, Starts Hostapd
 	"""
 	generate_confs()
-	global_config = config_gen.get_config()
-	IN = global_config['in']
-	OUT = global_config['out']
-	IP = global_config['ip_wlan']
-	NETMASK = global_config['netmask']
-	try:
-		with open(config.file_hostapd) as f: pass
-	except IOError as e:
-		exit_error('[ERROR] ' + config.file_hostapd + ' doesn\'t exist')
+	conf = config_gen.get_config()
+	env_tups = [(section+'_'+key, val) for section in conf.keys() for key, val in conf[section].items()]
+	env_dict = dict(os.environ.items() + env_tups)
 	
-	# Configure network interface
-	print 'configuring',IN,'...'
-	subprocess.call(['ifconfig', IN, 'up', IP, 'netmask', NETMASK])
-	sleep(1)
-	dhcp_log = open('./dhcp.log', 'w')
+	print 'Starting...'
+	for section in config.script_order:
+		print 'Executing %s for [%s]...' % (conf[section]['SCRIPT'], section),
+		ret = subprocess.call(conf[section]['SCRIPT'], env=env_dict)
+		if ret == 0:
+			print 'Done!'
+		else:
+			print 'Failed!'
+			exit_error('[ERROR] Failed to initiate %s, check log file %s' % (section, conf[section]['LOGFILE']))
 
-	# Start dhcpd
-	print 'Starting dhcpd...'
-	dhcp_proc = subprocess.Popen(['dhcpd',IN, '-cf', config.file_dhcpd],stdout = dhcp_log, stderr = dhcp_log) 
-	sleep(1)
-	dhcp_log.close();
-
-	# Configure iptables
-	print 'Configuring iptables...'
-	subprocess.call(['iptables','--flush'])
-	subprocess.call(['iptables','--table','nat','--flush'])
-	subprocess.call(['iptables','--delete-chain'])
-	subprocess.call(['iptables','--table','nat','--delete-chain'])
-	subprocess.call(['iptables','--table','nat','--append','POSTROUTING','--out-interface',OUT,'-j','MASQUERADE'])
-	subprocess.call(['iptables','--append','FORWARD','--in-interface',IN,'-j','ACCEPT'])
-	subprocess.call(['sysctl','-w','net.ipv4.ip_forward=1'])
-	
-	# Start hostapd
-	print 'Starting Hostapd...'
-	hostapd_proc = subprocess.Popen(['hostapd -t -d '+config.file_hostapd+' >./hostapd.log'],shell=True)
-	print 'Done... (Hopefully!)'
-	print
 
 def stop_hostapd():
 	"""

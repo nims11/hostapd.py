@@ -6,10 +6,10 @@ import config_gen
 def generate_confs():
 	global_config = config_gen.get_config()
 	for section in global_config.keys():
-		if global_config[section].has_key('template_config'):
-			if not global_config[section].has_key('output_config'):
-				exit_error("[ERROR] 'output_config' not specified for '" + section + "'")
-			template_file = global_config[section]['template_config']
+		if global_config[section].has_key('TEMPLATE_CONFIG'):
+			if not global_config[section].has_key('OUTPUT_CONFIG'):
+				exit_error("[ERROR] 'OUTPUT_CONFIG' not specified for '" + section + "'")
+			template_file = global_config[section]['TEMPLATE_CONFIG']
 			template_str = ''
 			try:
 				with open(template_file) as f:
@@ -21,11 +21,11 @@ def generate_confs():
 				template_str = template_str.replace('$' + key + '$', val)
 
 			try:
-				with open(global_config[section]['output_config'], 'wb') as f:
+				with open(global_config[section]['OUTPUT_CONFIG'], 'wb') as f:
 					print 'Writing', f.name, '...'
 					f.write(template_str)
 			except:
-				exit_error("[ERROR] Failed to open output_config '" + global_config[section]['output_config'] + "' in write mode")
+				exit_error("[ERROR] Failed to open output_config '" + global_config[section]['OUTPUT_CONFIG'] + "' in write mode")
 		elif section == 'HOSTAPD':
 			write_hostapd_conf(global_config)
 			
@@ -55,7 +55,7 @@ def get_nat_defaults():
 
 
 def write_hostapd_conf(global_config):
-	config_output = global_config['HOSTAPD']['output_config']
+	config_output = global_config['HOSTAPD']['OUTPUT_CONFIG']
 	print 'Writing', config_output, '...'
 	try:
 		with open(config_output, 'w') as f:

@@ -56,6 +56,7 @@ def gen_default_cfg():
 
 def write_cfg(content, section):
 	configparser = ConfigParser.ConfigParser()
+	configparser.optionxform = str
 	try:
 		with open(config.file_cfg) as f:
 			configparser.read(f.name)
@@ -65,8 +66,8 @@ def write_cfg(content, section):
 		configparser.add_section(section)
 	except ConfigParser.DuplicateSectionError: pass
 
-	for line in content:
-		configparser.set(section, line[0],line[1])
+	for key, val in content.items():
+		configparser.set(section, key, val)
 	print 'Writing Section', section, 'to',config.file_cfg,'...' 
 	try:
 		with open(config.file_cfg,'wb') as f:
@@ -82,6 +83,7 @@ def read_cfg():
 	import copy
 	global global_config
 	config_parse = ConfigParser.ConfigParser()
+	config_parse.optionxform = str
 	config_parse.read(config.file_cfg)
 	global_config = copy.deepcopy(default_config)
 	for section in config_parse.sections():

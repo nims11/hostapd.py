@@ -1,23 +1,11 @@
 #!/bin/bash
 ###########Start DHCP, comment out / add relevant section##########
-
-ERRORUSG=100
-ERRORROOT=101
-if [ $EUID != 0 ]; then
-	echo "Error: root privilege needed"
-	exit $ERRORROOT
-fi
-if [ $# != 2 ]
-then
-	echo "Usage: `basename $0` INTERFACE CONFIGFILE"
-	exit $ERRORUSG
-fi
-
-CONFIGFILE=$2
-INTERFACE=$1
-
 #Thanks to Panji
 #Doesn't try to run dhcpd when already running
-if [ "$(ps -e | grep dhcpd)" == "" ]; then
-dhcpd -cf $CONFIGFILE $INTERFACE &
+if [ "$(pidof dhcpd)" == "" ]; then
+echo "Starting dhcpd..." &> $DHCP_LOGFILE
+dhcpd -cf $DHCP_OUTPUT_CONFIG $GENERAL_in &>> $DHCP_LOGFILE
+exit $?
+else
+	echo "dhcpd already started..." &>> $DHCP_LOGFILE
 fi
