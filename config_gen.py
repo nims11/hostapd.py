@@ -1,39 +1,84 @@
 #!/usr/bin/env python2.7
 import sys
 import common_methods, ConfigParser, config_hostapd
+from common_methods import exit_error
 from config import bcolors
 import config
 global_config = {}
 default_config = {}
 def config_cli():
-	if len(sys.argv)==3:
-		if sys.argv[2] == 'list':
-			keys = global_config.keys()
-			for x in keys:
-				print x, '=', global_config[x]
-		elif global_config.has_key(sys.argv[2]):
-			print sys.argv[2], '=', global_config[sys.argv[2]]
+
+	# ./hostapd.py config
+	if len(sys.argv) == 2:
+		for section in global_config.keys():
+			print '[%s]' % section
+			for key, val in global_config[section].items():
+				print '%s = %s' %(key,val)
+			print
+	
+	# ./hostapd.py config <section>
+	elif len(sys.argv) == 3:
+		section = sys.argv[2]
+		if global_config.has_key(section):
+			print '[%s]' % section
+			for key, val in global_config[section].items():
+				print '%s = %s' % (key, val)
 		else:
-			print 'Invalid key :', sys.argv[2]
+			exit_error('[%s] Does not exist' % section)
+	
+	# ./hostapd.py config <section> <key>
 	elif len(sys.argv) == 4:
-		if global_config.has_key(sys.argv[2]):
-			global default_config
-			sections = default_config.keys()
-			for section in sections:
-				length = len(default_config[section])
-				for idx in range(length):
-					key, val = default_config[section][idx]
-					if key == sys.argv[2]:
-						val = sys.argv[3]
-					else:
-						val = global_config[key]
-					default_config[section][idx] = (key, val)
-			print 'Changing \''+sys.argv[2]+'\' to \''+sys.argv[3] + '\''
-			gen_default_cfg()
+		section = sys.argv[2]
+		key = sys.argv[3]
+		if global_config.has_key(section):
+			if global_config[section].has_key(key):
+				print global_config[section][key]
+			else:
+				exit_error('No key %s in [%s]' % (key, section))
 		else:
-			print 'Invalid key :', sys.argv[2]
-	else:
-		common_methods.exit_error('[ERROR] config: incorrect usage', 1)
+			exit_error('[%s] Does not exist' % section)
+	
+	# ./hostapd.py config <section> <key> <val>
+	elif len(sys.argv) == 5:
+		section = sys.argv[2]
+		key = sys.argv[3]
+		val = sys.argv[4]
+		import copy
+		conf = copy.deepcopy(global_config)
+		conf[section][key] = val
+		gen_default_cfg(conf)
+
+
+
+#	if len(sys.argv) == 3:
+#		if sys.argv[2] == 'list':
+#			keys = global_config.keys()
+#			for x in keys:
+#				print x, '=', global_config[x]
+#		elif global_config.has_key(sys.argv[2]):
+#			print sys.argv[2], '=', global_config[sys.argv[2]]
+#		else:
+#			print 'Invalid key :', sys.argv[2]
+#	elif len(sys.argv) == 4:
+#		if global_config.has_key(sys.argv[2]):
+#			global default_config
+#			sections = default_config.keys()
+#			for section in sections:
+#				length = len(default_config[section])
+#				for idx in range(length):
+#					key, val = default_config[section][idx]
+#					if key == sys.argv[2]:
+#						val = sys.argv[3]
+#					else:
+#						val = global_config[key]
+#					default_config[section][idx] = (key, val)
+#			print 'Changing \''+sys.argv[2]+'\' to \''+sys.argv[3] + '\''
+#			gen_default_cfg()
+#		else:
+#			print 'Invalid key :', sys.argv[2]
+#	else:
+#		common_methods.exit_error('[ERROR] config: incorrect usage', 1)
+
 def read_default_cfg():
 	"""
 	Write to default_config
@@ -49,10 +94,10 @@ def read_default_cfg():
 		default_config[section] = dict(default_config[section])
 
 def gen_default_cfg():
-	write_cfg(default_config['HOSTAPD'], 'HOSTAPD')
-	write_cfg(default_config['DHCP'], 'DHCP')
-	write_cfg(default_config['GENERAL'], 'GENERAL')
-	write_cfg(default_config['NAT'], 'NAT')
+	write_cfg(config['HOSTAPD'], 'HOSTAPD')
+	write_cfg(config['DHCP'], 'DHCP')
+	write_cfg(config['GENERAL'], 'GENERAL')
+	write_cfg(config['NAT'], 'NAT')
 
 def write_cfg(content, section):
 	configparser = ConfigParser.ConfigParser()
@@ -102,7 +147,7 @@ def init():
 		with open(config.file_cfg) as f: pass
 	except IOError:
 		print bcolors.WARNING, '[WARNING]', config.file_cfg, 'does not exist, Generating Defaults...' ,bcolors.ENDC
-		gen_default_cfg()
+		gen_default_cfg(default_config)
 	read_cfg()
 
 if __name__ == '__main__':
