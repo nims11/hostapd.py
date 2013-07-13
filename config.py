@@ -1,4 +1,6 @@
 import os
+prefix = os.path.dirname(os.path.realpath(__file__))
+os.chdir(prefix)
 # File locations
 file_cfg = 'py_hostapd.cfg'
 

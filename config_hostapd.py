@@ -1,6 +1,6 @@
 #!/usr/bin/env python2.7
 from common_methods import exit_script, display_usage, exit_error
-import sys
+import sys, os
 import config
 import config_gen
 def generate_confs():

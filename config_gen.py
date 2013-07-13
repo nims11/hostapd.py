@@ -48,37 +48,6 @@ def config_cli():
 		conf[section][key] = val
 		gen_default_cfg(conf)
 
-
-
-#	if len(sys.argv) == 3:
-#		if sys.argv[2] == 'list':
-#			keys = global_config.keys()
-#			for x in keys:
-#				print x, '=', global_config[x]
-#		elif global_config.has_key(sys.argv[2]):
-#			print sys.argv[2], '=', global_config[sys.argv[2]]
-#		else:
-#			print 'Invalid key :', sys.argv[2]
-#	elif len(sys.argv) == 4:
-#		if global_config.has_key(sys.argv[2]):
-#			global default_config
-#			sections = default_config.keys()
-#			for section in sections:
-#				length = len(default_config[section])
-#				for idx in range(length):
-#					key, val = default_config[section][idx]
-#					if key == sys.argv[2]:
-#						val = sys.argv[3]
-#					else:
-#						val = global_config[key]
-#					default_config[section][idx] = (key, val)
-#			print 'Changing \''+sys.argv[2]+'\' to \''+sys.argv[3] + '\''
-#			gen_default_cfg()
-#		else:
-#			print 'Invalid key :', sys.argv[2]
-#	else:
-#		common_methods.exit_error('[ERROR] config: incorrect usage', 1)
-
 def read_default_cfg():
 	"""
 	Write to default_config
@@ -93,7 +62,7 @@ def read_default_cfg():
 	for section in default_config.keys():
 		default_config[section] = dict(default_config[section])
 
-def gen_default_cfg():
+def gen_default_cfg(config):
 	write_cfg(config['HOSTAPD'], 'HOSTAPD')
 	write_cfg(config['DHCP'], 'DHCP')
 	write_cfg(config['GENERAL'], 'GENERAL')
