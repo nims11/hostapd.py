@@ -15,7 +15,7 @@ class bcolors:
 # config_template specifies the attribute type, default value and available choices
 # type 0 means that the attribute doesn't have any limited choices as their values
 # type 1 means that the attribute value should be from one of the values specified by 'choices' list
-hostapd_default = {
+hostapd_defaults = {
 		'OUTPUT_CONFIG' : {'type' : 0, 'default' : '/etc/py_hostapd.conf'},
 		'SCRIPT' : {'type' : 0, 'default' : 'scripts/hostapd'},
 		'EXIT_SCRIPT': {'type' : 0, 'default' : 'scripts/hostapd_exit'},
@@ -69,8 +69,27 @@ nat_defaults = {
 		'LOGFILE'  : 'logs/nat',
 }
 
+default_parser = lambda x: dict([tup for tup in x.items()])
+hostapd_default_parser = lambda x: dict([(tup[0], tup[1]['default']) for tup in x.items()])
+# Default configuration dictionary
+default_config = {
+		'HOSTAPD': hostapd_default_parser(hostapd_defaults),
+		'DHCP': default_parser(dhcp_defaults),
+		'GENERAL': default_parser(general_defaults),
+		'NAT': default_parser(nat_defaults),
+		}
+
+
 # Specific config options
+# Following all Uppercase convention for special options. These are used by this python client for each section.
+#
+# SCRIPT -> Path of script which handles the start for a section, invoked when './hostapd.py start' is called.
+# TEMPLATE_CONFIG -> path to the template file for a section which will be filled with values.
+# OUTPUT_CONFIG -> File where the filled TEMPLATE_CONFIG will be stored.
+# EXIT_SCRIPT -> Path of script which handles the exit for a section, invoked when './hostapd.py stop' is called.
+# LOGFILE -> File where to store logs for a section
 special_options = ['SCRIPT', 'TEMPLATE_CONFIG', 'OUTPUT_CONFIG', 'EXIT_SCRIPT', 'LOGFILE']
 
 # Script Execution order
+# Order in which each section is started
 script_order = ['GENERAL', 'DHCP', 'NAT', 'HOSTAPD']

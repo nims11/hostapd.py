@@ -4,10 +4,12 @@ import common_methods, ConfigParser, config_hostapd
 from common_methods import exit_error
 from config import bcolors
 import config
+from config import default_config
 global_config = {}
-default_config = {}
 def config_cli():
-
+	"""
+	Handles Config via CLI commands
+	"""
 	# ./hostapd.py config
 	if len(sys.argv) == 2:
 		for section in global_config.keys():
@@ -46,27 +48,11 @@ def config_cli():
 		import copy
 		conf = copy.deepcopy(global_config)
 		conf[section][key] = val
-		gen_default_cfg(conf)
+		gen_cfg(conf)
 
-def read_default_cfg():
-	"""
-	Write to default_config
-	"""
-	global default_config
-	default_config = {
-			'HOSTAPD' : config_hostapd.get_hostapd_defaults(),
-			'DHCP' : config_hostapd.get_dhcp_defaults(),
-			'GENERAL' : config_hostapd.get_general_defaults(),
-			'NAT' : config_hostapd.get_nat_defaults(),
-			}
-	for section in default_config.keys():
-		default_config[section] = dict(default_config[section])
-
-def gen_default_cfg(config):
-	write_cfg(config['HOSTAPD'], 'HOSTAPD')
-	write_cfg(config['DHCP'], 'DHCP')
-	write_cfg(config['GENERAL'], 'GENERAL')
-	write_cfg(config['NAT'], 'NAT')
+def gen_cfg(config):
+	for key, val in config.items():
+		write_cfg(val, key)
 
 def write_cfg(content, section):
 	configparser = ConfigParser.ConfigParser()
@@ -111,12 +97,11 @@ def init():
 	"""
 	If config file exists, reads it, else generates a default one
 	"""
-	read_default_cfg()
 	try:
 		with open(config.file_cfg) as f: pass
 	except IOError:
 		print bcolors.WARNING, '[WARNING]', config.file_cfg, 'does not exist, Generating Defaults...' ,bcolors.ENDC
-		gen_default_cfg(default_config)
+		gen_cfg(default_config)
 	read_cfg()
 
 if __name__ == '__main__':
