@@ -4,6 +4,10 @@ import sys, os
 import config
 import config_gen
 def generate_confs():
+	"""
+	For each section generate config files if TEMPLATE_CONFIG is present into OUTPUT_CONFIG
+	Exception for HOSTAPD as it may have many variables which is not intended to be specified through TEMPLATE_CONFIG
+	"""
 	global_config = config_gen.get_config()
 	for section in global_config.keys():
 		if global_config[section].has_key('TEMPLATE_CONFIG'):
@@ -29,31 +33,6 @@ def generate_confs():
 		elif section == 'HOSTAPD':
 			write_hostapd_conf(global_config)
 			
-def get_general_defaults():
-	content = []
-	for tup in config.general_defaults.items():
-		content.append(tup)
-	return content
-
-def get_dhcp_defaults():
-	content = []
-	for tup in config.dhcp_defaults.items():
-		content.append(tup)
-	return content
-
-def get_hostapd_defaults():
-	ret = []
-	for tup in config.hostapd_default.items():
-		ret.append((tup[0], tup[1]['default']))
-	return ret
-
-def get_nat_defaults():
-	content = []
-	for tup in config.nat_defaults.items():
-		content.append(tup)
-	return content
-
-
 def write_hostapd_conf(global_config):
 	config_output = global_config['HOSTAPD']['OUTPUT_CONFIG']
 	print 'Writing', config_output, '...'

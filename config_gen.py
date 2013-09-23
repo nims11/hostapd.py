@@ -51,6 +51,9 @@ def config_cli():
 		gen_cfg(conf)
 
 def gen_cfg(config):
+	"""
+	config.items() -> (<section>, <dict of values>)
+	"""
 	for key, val in config.items():
 		write_cfg(val, key)
 
