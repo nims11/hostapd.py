@@ -1,8 +1,17 @@
 #!/usr/bin/env python2.7
-import subprocess, config, sys, config_gen, shlex, os
+import subprocess, config, sys, config_gen, shlex, os, errno
 from time import sleep
 from common_methods import exit_script, exit_error
 from config_hostapd import generate_confs
+
+def make_dirs(conf):
+	if conf.has_key('LOGFILE'):
+		dirname = os.path.dirname(conf['LOGFILE'])
+		try:
+			os.makedirs(dirname)
+		except OSError as exc:
+			if exc.errno != errno.EEXIST:
+				raise
 
 def start_hostapd():
 	generate_confs()
@@ -13,6 +22,7 @@ def start_hostapd():
 	print 'Starting...'
 	for section in config.script_order:
 		if conf[section].has_key('SCRIPT'):
+			make_dirs(conf[section])
 			print 'Executing %s for [%s]...' % (conf[section]['SCRIPT'], section),
 			ret = subprocess.call(conf[section]['SCRIPT'], env=env_dict)
 			if ret == 0:
@@ -32,6 +42,7 @@ def stop_hostapd():
 	print 'Stopping...'
 	for section in config.script_order[::-1]:
 		if conf[section].has_key('EXIT_SCRIPT'):
+			make_dirs(conf[section])
 			print 'Executing %s for [%s]...' % (conf[section]['EXIT_SCRIPT'], section),
 			ret = subprocess.call(conf[section]['EXIT_SCRIPT'], env=env_dict)
 			if ret == 0:
