@@ -14,23 +14,29 @@ h2. Usage
 
 hostapd.py requires root privileges to work.
 
-chmod +x hostapd.py
+```
+$ chmod +x hostapd.py
+```
+```
 Usage :
-   * hostapd.py [action] [<notextile><options><notextile>...]
+   hostapd.py [action] [<options>...]
 
 Following actions are currently supported:
-   * start
-   * stop
-   * restart
-   * config
-   * help
+   start
+   stop
+   restart
+   config
+   help
 
 Usage for action config:
-   * hostapd.py config                          - list all attributes with values
-   * hostapd.py config section_name             - list all attributes under secion_name with values
-   * hostapd.py config section_name attrib_name - shows the value for attrib_name under section_name, if set
-   * hostapd.py config section_name attrib_name 
-     attrib_val                                 - modifies the value of attrib_name to attrib_val
+   hostapd.py config                                       - list all attributes with values
+   hostapd.py config section_name                          - list all attributes under secion_name with values
+   hostapd.py config section_name attrib_name              - shows the value for section_name->attrib_name, if set
+   hostapd.py config section_name attrib_name attrib_val   - modifies the value of section_name->attrib_name to attrib_val
+
+```
+
+
 
 h2. Configuring
 
