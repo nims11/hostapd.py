@@ -4,11 +4,14 @@ import config_gen
 from HPS import start_hostapd, stop_hostapd, restart_hostapd
 from config_hostapd import generate_confs
 from common_methods import exit_script, display_usage
+from helper import detach_wifi
 
 def main():
 	"""
 	The starting point
 	"""
+        network_manager = detach_wifi()
+        return
 	config_gen.init()
 	actions = { 'start' : start_hostapd,
 			'stop' : stop_hostapd,
